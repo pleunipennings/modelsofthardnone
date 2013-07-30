@@ -1,7 +1,7 @@
 ##write shell script. 
 
 
-data<-data.frame(Dres=rep(0,100),Rwt=0, DDR=0,Pfix=0,Psoft=0)
+data<-data.frame(Dres=rep(0,1000),Rwt=0, DDR=0,Pfix=0,Psoft=0)
 
 Rwt=2; 
 i=0
@@ -10,7 +10,7 @@ for (Rwt in seq(1.1,3,by=0.2)){
 	RwtChar=substr(as.character(Rwt+0.00001),1,4)
 
 #for (Dres in seq(0,Rwt,by=0.4)){
-	for (Dres in 0){
+	for (Dres in 0.05){
 		for (DDR in seq(Dres,1,by=0.1)){
 			
 			i=i+1
@@ -21,7 +21,7 @@ for (Rwt in seq(1.1,3,by=0.2)){
 			
 			filetowrite="ShellScript.sh"
 			write("#!/bin/bash",file=filetowrite)
-			write(paste("seed=7\nnRuns=300\nRwt=",Rwt,"\nDres=",Dres,"\nDDR=",DDR,"\nmu=0.00001\nmu_after_on=1\nmig=0\nKmain=10000\nKrefu=0\nV=1\n",sep=""),file=filetowrite,append=TRUE)
+			write(paste("seed=7\nnRuns=2000\nRwt=",Rwt,"\nDres=",Dres,"\nDDR=",DDR,"\nmu=0.000005\nmu_after_on=1\nmig=0\nKmain=10000\nKrefu=0\nV=1\n",sep=""),file=filetowrite,append=TRUE)
 			
 #Dres is the cost of the mutation. Should vary from 0 to Rwt (2 in this case)
 			write('echo "
@@ -49,6 +49,17 @@ for (Rwt in seq(1.1,3,by=0.2)){
 			data$PsoftRel[i]=data$Psoft[i]/data$Pfix[i]
 			
 		}}}
+
+
+data<-data[data$Rwt>0,]
+library(lattice)
+
+png("ResultsPsoftRel.png")
+levelplot(PsoftRel~Rwt*DDR, data, cuts=8,main="relative prob multiple origin soft sweep")
+dev.off()
+png("ResultsPfix.png")
+levelplot(Pfix~Rwt*DDR, data, cuts=8,main="prob fix")
+dev.off()
 
 
 if (FALSE){
