@@ -1,10 +1,10 @@
 #!/bin/bash
 seed=7
-nRuns=300
+nRuns=2000
 Rwt=2.9
-Dres=0
-DDR=0.1
-mu=0.00001
+Dres=0.05
+DDR=0.95
+mu=0.000005
 mu_after_on=1
 mig=0
 Kmain=10000

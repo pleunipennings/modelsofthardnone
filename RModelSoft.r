@@ -1,6 +1,5 @@
 ##write shell script. 
 
-
 data<-data.frame(Dres=rep(0,1000),Rwt=0, DDR=0,Pfix=0,Psoft=0)
 
 Rwt=2; 
@@ -83,7 +82,6 @@ legend("topright", inset=.05,
 c("no adaptation","hard sweep","soft sweep"), fill=c(0,2,4), horiz=FALSE)
 dev.off()
 png(paste("Picture2_mut_on",mut_on,".png",sep=""))
-
 
 
 plot(Data$DDR,Data$Fixprob,t="n",ylab="Pfix",xlab="Strength Drugs",ylim=c(0,1),xlim=c(0,1),main="Prob soft given fixation")

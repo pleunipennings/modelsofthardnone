@@ -54,6 +54,8 @@ double MutPresent[5000]; //whether the mutant is present averaged over all runs
 double MeanTfix = 0; //calculate time to fixation of mutant
 double FixProb = 0; // to calculate the number of runs where the mutant has fixed and thereby the probability that it fixes. 
 double PSoft = 0; 
+double BenAlleHomozygosity = 0; // to get homozygosity at beneficial allele 1-BenAlleHomozygosity = Psoft2
+double Psoft2 = 0; 
 
 //Parameters to be set in "GetParameters"
 unsigned int seed, nRuns; 
@@ -184,6 +186,11 @@ if ((double)PopSizeMut[simlength-1]>(double)PopSizeWT[simlength-1]&&PopSizeMut[s
 	int numOrigins = 0;
 	for (int j = 1; j<100; j++){if (popArray[j]>0){numOrigins++;}}
 	if (numOrigins>1) PSoft+=1; 
+	double BenAlleHomozygosityThisRun=0; 
+	for (int j = 1; j<100; j++){BenAlleHomozygosityThisRun+=double(popArray[j])*double(popArray[j])/(double(PopSizeMut[simlength-1])*double(PopSizeMut[simlength-1]));}
+	BenAlleHomozygosity += BenAlleHomozygosityThisRun; 
+//cerr<<	BenAlleHomozygosityThisRun<<"\t"<<BenAlleHomozygosity<<"\n";
+	
 } //I assume a mutation will fix if it has more than 0.5 frequency 
 }
 
@@ -211,6 +218,7 @@ int main (int argc, char *argv[]){
 	FixProb/=(double)nRuns; //to calculate the probability that adaptation has happened
 	PSoft/=(double)nRuns; //to calculate the probability that adaptation has happened
 	MeanTfix/=((double)nRuns*FixProb);MeanTfix-=simlengthBEFORE;
+	BenAlleHomozygosity/=((double)nRuns*FixProb);
 	
 	//write summary output
 	output << "Nruns\t"<< nRuns; 
@@ -222,7 +230,8 @@ int main (int argc, char *argv[]){
 	output <<"\tFixprob\t" <<FixProb<<"\tProbSoft\t"<<PSoft<<"\tV\t"<<V; 
 	output <<"\tNMut\t"<<MeanPopSizeMut[simlength-1]; 
 	output << "\tKmain\t"<< Kmain<< "\tKrefu\t"<< Krefu ; 
-	output <<"\t"<<"\tMeanTfix\t"<<MeanTfix<<"\n"; 
+	output <<"\t"<<"\tMeanTfix\t"<<MeanTfix; 
+	output <<"\t"<<"\tBenAlleHomozygosity\t"<<BenAlleHomozygosity<<"\n"; 
 		
 	return 5;
 }
